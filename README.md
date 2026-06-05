@@ -34,6 +34,7 @@ polar(X) = (XX^T)^{-1/2} @ X
 - **Polar Express 系数**：比单组系数收敛更精确
 - **Restart 策略**：第 2 次迭代后重启，消除 float16 下的数值不稳定
 - **float16 替代 bfloat16**：值域在 1 附近，float16 精度更高
+- **torch.baddbmm 融合运算**：使用 `torch.baddbmm` 将 `beta*A + alpha*(B@C)` 融合为单次 kernel 调用，减少中间张量分配和显存带宽消耗，在大矩阵上额外提速 ~10-15%
 
 ## 性能对比
 

@@ -43,14 +43,14 @@ def gram_newton_schulz(G, steps=5):
             R = X @ X.mT
             Q = None
 
-        Z = b * R + c * (R @ R)
+        Z = torch.baddbmm(R, R, R, beta=b, alpha=c)
         if Q is None:
             Q = Z + a * I
         else:
-            Q = Q @ Z + a * Q
+            Q = torch.baddbmm(Q, Q, Z, beta=a, alpha=1.0)
         if i < len(coeffs) - 1 and (i + 1) != 2:
-            RZ = R @ Z + a * R
-            R = Z @ RZ + a * RZ
+            RZ = torch.baddbmm(R, R, Z, beta=a, alpha=1.0)
+            R = torch.baddbmm(RZ, Z, RZ, beta=a, alpha=1.0)
 
     X = Q @ X
 
